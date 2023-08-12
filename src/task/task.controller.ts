@@ -32,6 +32,7 @@ export class TaskController {
   @Get('/getall')
   @HttpCode(HttpStatus.OK)
   getall() {
+    console.log('get all tasks endpoint request');
     return this.taskService.getall();
   }
 
