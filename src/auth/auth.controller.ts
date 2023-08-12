@@ -5,11 +5,13 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { GetCurrentUser } from 'src/common/decorators';
-import { AtGuard, RtGuard } from 'src/common/guards';
+import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
+import { GetCurrentUserId } from 'src/common/decorators';
+import { RtGuard } from 'src/common/guards';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Tokens } from './types';
@@ -21,20 +23,24 @@ export class AuthController {
   @Post('/signup')
   @HttpCode(HttpStatus.CREATED)
   signup(@Body() dto: AuthDto): Promise<Tokens> {
+    console.log('sign up request');
     return this.authService.signup(dto);
   }
 
   @Post('/signin')
   @HttpCode(HttpStatus.OK)
   signin(@Body() dto: AuthDto): Promise<Tokens> {
+    console.log('sign in request');
     return this.authService.signin(dto);
   }
 
-  @UseGuards(AtGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  logout(@GetCurrentUser('sub') userId: number) {
-    return this.authService.logout(userId);
+  logout(@GetCurrentUserId() userId: number, @Res() res: Response) {
+    console.log('log out request');
+    this.authService.logout(userId);
+    res.status(200).send({ msg: 'logout successfully' });
   }
 
   @UseGuards(RtGuard)
