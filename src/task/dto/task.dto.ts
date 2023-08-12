@@ -1,11 +1,20 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class AuthDto {
-    @IsNotEmpty()
-    @IsString()
-    email: string;
+export class TaskDto {
 
     @IsNotEmpty()
     @IsString()
-    password: string;
+    author: string;
+
+    @IsNotEmpty()
+    @IsString()
+    title: string;
+
+    @IsNotEmpty()
+    @IsString()
+    description: string;
+
+    dueDate: string;
+
+    status: string;
 }

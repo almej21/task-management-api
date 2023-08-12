@@ -15,3 +15,14 @@ model User {
 
   @@map("users")
 }
+
+model Task {
+  id          Int    @id @default(autoincrement())
+  author      String
+  title       String
+  description String
+  dueDate     String
+  status      String
+
+  @@map("tasks")
+}
