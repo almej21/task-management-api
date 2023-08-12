@@ -1,8 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class TaskDto {
-  @IsNotEmpty()
-  id: number;
+  id?: number;
 
   @IsNotEmpty()
   @IsString()

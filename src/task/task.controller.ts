@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -41,10 +42,13 @@ export class TaskController {
     res.status(201).send({ msg: 'Task edited', editedTask });
   }
 
-  // @Delete('/delete')
-  // @HttpCode(HttpStatus.OK)
-  // Delete(@Req() req: Request) {
-  //     const user = req.user;
-  //     return this.taskService.Delete();
-  // }
+  @Delete('/delete')
+  @HttpCode(HttpStatus.OK)
+  async Delete(@Body('id') id: number, @Res() res: Response) {
+    if (await this.taskService.delete(id)) {
+      return res.status(200).send({ msg: 'Task deleted' });
+    } else {
+      return res.status(501).send({ msg: 'Task is not deleted' });
+    }
+  }
 }

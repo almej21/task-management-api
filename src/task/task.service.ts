@@ -16,6 +16,7 @@ export class TaskService {
     // creating a new task
     const newTask = await this.prisma.task.create({
       data: {
+        id: dto.id || undefined,
         author: dto.author,
         title: dto.title,
         description: dto.description,
@@ -44,5 +45,16 @@ export class TaskService {
         status: dto.status || undefined,
       },
     });
+  }
+
+  async delete(id: number) {
+    try {
+      await this.prisma.task.delete({
+        where: { id: Number(id) },
+      });
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }
