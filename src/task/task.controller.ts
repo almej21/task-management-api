@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Put,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -29,15 +30,16 @@ export class TaskController {
 
   @Get('/getall')
   @HttpCode(HttpStatus.OK)
-  read() {
+  getall() {
     return this.taskService.getall();
   }
 
-  // @Post('/edit')
-  // @HttpCode(HttpStatus.OK)
-  // edit(@Body() dto: TaskDto): Promise<Task> {
-  //     return this.taskService.edit(dto);
-  // }
+  @Put('/edit')
+  @HttpCode(HttpStatus.OK)
+  async edit(@Body('id') id: number, @Body() dto: any, @Res() res: Response) {
+    const editedTask = await this.taskService.edit(id, dto);
+    res.status(201).send({ msg: 'Task edited', editedTask });
+  }
 
   // @Delete('/delete')
   // @HttpCode(HttpStatus.OK)

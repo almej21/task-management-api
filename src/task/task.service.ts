@@ -32,4 +32,17 @@ export class TaskService {
 
     return tasks;
   }
+
+  async edit(id: number, dto: TaskDto) {
+    return this.prisma.task.update({
+      where: { id: Number(id) },
+      data: {
+        author: dto.author || undefined,
+        title: dto.title || undefined,
+        description: dto.description || undefined,
+        dueDate: dto.dueDate || undefined,
+        status: dto.status || undefined,
+      },
+    });
+  }
 }
