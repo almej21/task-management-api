@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -20,6 +21,14 @@ import { Tokens } from './types';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(AuthGuard('jwt-refresh'))
+  @Get('/isloggedin')
+  @HttpCode(HttpStatus.OK)
+  isloggedin(@Res() res: Response) {
+    console.log('isloggedin request');
+    res.status(200).send({ msg: 'user is logged in' });
+  }
+
   @Post('/signup')
   @HttpCode(HttpStatus.CREATED)
   signup(@Body() dto: AuthDto): Promise<Tokens> {
@@ -34,7 +43,8 @@ export class AuthController {
     return this.authService.signin(dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(RtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number, @Res() res: Response) {
@@ -44,9 +54,10 @@ export class AuthController {
   }
 
   @UseGuards(RtGuard)
-  @Post('/refresh')
+  @Post('/refreshtokens')
   @HttpCode(HttpStatus.OK)
   refreshTokens(@Req() req: Request) {
+    console.log('refresh tokens request');
     const user = req.user;
     return this.authService.refreshTokens(user['sub'], user['refreshToken']);
   }

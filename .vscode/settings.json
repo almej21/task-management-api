@@ -3,6 +3,8 @@
     "Almog",
     "datasource",
     "datasources",
+    "isloggedin",
+    "refreshtokens",
     "signin",
     "taskmanagement"
   ]

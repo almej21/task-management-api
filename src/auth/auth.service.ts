@@ -44,7 +44,6 @@ export class AuthService {
     if (!user) throw new ForbiddenException('Access Denied');
 
     const passMatches = await bcrypt.compare(dto.password, user.hash);
-    // const passwordMatches = dto.password === user.hash ? true : false;
     if (!passMatches) throw new ForbiddenException('Access Denied');
 
     const tokens = await this.getTokens(user.id, user.email);
@@ -91,7 +90,7 @@ export class AuthService {
           sub: userId,
           email,
         },
-        { secret: 'at-secret', expiresIn: 60 * 15 },
+        { secret: 'at-secret', expiresIn: 60 * 10 }, //expiresIn 10 min
       ),
       this.jwtService.signAsync(
         {
