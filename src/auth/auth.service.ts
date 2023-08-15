@@ -18,20 +18,23 @@ export class AuthService {
     // hashing the password
     const hash = await this.hashedData(dto.password);
 
-    // creating a new user
-    const newUser = await this.prisma.user.create({
-      data: {
-        user_name: dto.user_name,
-        email: dto.email,
-        hash: hash,
-      },
-    });
-
-    // getting new tokens based on the id and email.
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    // updating the user's tokens.
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
-    return tokens;
+    try {
+      // creating a new user
+      const newUser = await this.prisma.user.create({
+        data: {
+          user_name: dto.user_name,
+          email: dto.email,
+          hash: hash,
+        },
+      });
+      // getting new tokens based on the id and email.
+      const tokens = await this.getTokens(newUser.id, newUser.email);
+      // updating the user's tokens.
+      await this.updateRtHash(newUser.id, tokens.refresh_token);
+      return tokens;
+    } catch {
+      throw new ForbiddenException('email already exists');
+    }
   }
 
   async signin(dto: AuthDto) {

@@ -9,7 +9,6 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { RtGuard } from 'src/common/guards';
@@ -21,7 +20,7 @@ import { Tokens } from './types';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RtGuard)
   @Get('/isloggedin')
   @HttpCode(HttpStatus.OK)
   isloggedin(@Res() res: Response) {
@@ -43,7 +42,6 @@ export class AuthController {
     return this.authService.signin(dto);
   }
 
-  // @UseGuards(AuthGuard('jwt'))
   @UseGuards(RtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
@@ -59,6 +57,11 @@ export class AuthController {
   refreshTokens(@Req() req: Request) {
     console.log('refresh tokens request');
     const user = req.user;
-    return this.authService.refreshTokens(user['sub'], user['refreshToken']);
+    const refToken = req.headers['authorization'];
+
+    return this.authService.refreshTokens(
+      user['sub'],
+      refToken.replace('Bearer', '').trim(),
+    );
   }
 }

@@ -2,23 +2,27 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-    constructor() {
-        super({
-            datasources: {
-                db: {
-                    url: "postgresql://postgres:Almog2121@localhost:5432/taskmanagement?schema=public",
-                },
-            },
-        });
-    }
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
+  constructor() {
+    super({
+      datasources: {
+        db: {
+          url: 'postgresql://postgres:Almog2121@localhost:5432/taskmanagement?schema=public',
+        },
+      },
+    });
+  }
 
-    async onModuleInit() {
-        await this.$connect();
-    }
+  async onModuleInit() {
+    await this.$connect();
+  }
 
-    async onModuleDestroy() {
-        await this.$disconnect();
-
-    }
+  async onModuleDestroy() {
+    await this.$disconnect();
+  }
 }
+
+//url: 'postgresql://postgres:Almog2121@localhost:5432/taskmanagement?schema=public',
