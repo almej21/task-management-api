@@ -1,15 +1,5 @@
 version: '3'
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres_db
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Almog2121
-      POSTGRES_DB: taskmanagement
-
   nestjs-app:
     build:
       context: .
@@ -31,3 +21,13 @@ services:
       - ./src:/app/src
       - ./dist:/app/dist
     command: npm run start:dev
+
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: taskmanagement
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Almog2121

@@ -1,8 +1,9 @@
-FROM node:18-alpine
+FROM node:18
 
 WORKDIR /usr/app
 
-COPY package.json .
+COPY package*.json .
+COPY prisma ./prisma/
 
 RUN npm install
 
